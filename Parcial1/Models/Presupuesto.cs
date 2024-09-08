@@ -21,25 +21,63 @@ namespace Parcial1.Models
         }
 
         public void AgregarProducto(Producto unproducto)
-        { listaProductos.Add (unproducto);
+        { 
+            listaProductos.Add (unproducto);
         }
 
         public bool QuitarProducto(int codigo)
         {
-            
+            // bool eliminado = false;
+
             Producto c = BuscarProducto(codigo);
+            
             if (c != null)
             {
                 listaProductos.Remove(c);
+                //eliminado = true;
+                return true;
             }
-            return             
+            
+            return false;
         }
 
         public Producto BuscarProducto(int codigo)
         {
-            listaProductos.Sort();
-            Producto p = listaProductos.BinarySearch (codigo);
+           listaProductos.Sort();
 
+            Producto pedido = null;
+            pedido.Codigo = codigo;
+
+            int idx = listaProductos.BinarySearch(pedido);
+            if (idx >= 0)
+            {
+                return listaProductos[idx] as Producto;
+            }
+            
+            return null;
+
+           
+
+        }
+        public Producto BuscarProducto2(int codigo)
+        {
+            int inf = 0;
+            int sup = listaProductos.Count - 1;
+            
+            while (inf < sup)
+            {
+                int medio = (inf + sup) / 2;
+                
+                Producto buscado = listaProductos[medio] as Producto;
+                if (buscado == null) return null;
+                
+                if (buscado.Codigo == codigo)
+                { return buscado; }
+                
+                else if (buscado.Codigo < codigo) { sup = medio - 1; }
+                else { inf = medio + 1; }
+            }
+            return null;
         }
 
 
